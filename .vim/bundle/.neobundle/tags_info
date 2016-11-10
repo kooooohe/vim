@@ -1,8 +1,15 @@
 emmet-vim
+indentLine
+lightline.vim
+molokai
 neobundle.vim
-neocomplcache
+neocomplete.vim
+neosnippet
+neosnippet-snippets
 nerdtree
+syntastic
 unite.vim
 vim-autoclose
+vim-trailing-whitespace
 vimfiler
 vimproc
