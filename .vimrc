@@ -30,6 +30,10 @@ nnoremap j gj
 nnoremap k gk
 nnoremap <down> gj
 nnoremap <up> gk
+" tagsジャンプの時に複数ある時は一覧表示
+"nnoremap <C-]> g<C-]> 
+nnoremap <C-h> :vsp<CR> :exe("tjump ".expand('<cword>'))<CR>
+nnoremap <C-k> :split<CR> :exe("tjump ".expand('<cword>'))<CR>
 
 set showmatch " 括弧の対応関係を一瞬表示する
 source $VIMRUNTIME/macros/matchit.vim " Vimの「%」を拡張する "
@@ -37,6 +41,10 @@ source $VIMRUNTIME/macros/matchit.vim " Vimの「%」を拡張する "
 set wildmenu " コマンドモードの補完
 set history=5000 " 保存するコマンド履歴の数  "
 
+"ctags設定 拡張子で読み込みタグ変更
+au BufNewFile,BufRead *.php set tags+=$HOME/php.tags
+" vim-tags
+au BufNewFile,BufRead *.php let g:vim_tags_project_tags_command = "ctags --languages=php -f ~/php.tags `pwd` 2>/dev/null &"
 "クリップボードからペーストする時インデントがずれる問題を修正
 if &term =~ "xterm"
     let &t_SI .= "\e[?2004h"
@@ -50,7 +58,7 @@ if &term =~ "xterm"
 
     inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
 endif
- 
+
 if has('vim_starting')
    " 初回起動時のみruntimepathにneobundleのパスを指定する
    set runtimepath+=~/.vim/bundle/neobundle.vim/
@@ -80,6 +88,13 @@ NeoBundle 'bronson/vim-trailing-whitespace'
 NeoBundle 'Yggdroot/indentLine'
 "構文チェック
 NeoBundle 'scrooloose/syntastic'
+NeoBundle 'pmsorhaindo/syntastic-local-eslint.vim'
+"ctagコマンドうつのめんどくさいから　TagsGenerate　でvim上で自動でやってくれるようにする"
+"ctags --languages=php -f ~/php.tags `pwd`"
+NeoBundle 'szw/vim-tags'
+" プロジェクトに入ってるESLintを読み込む
+NeoBundle 'szw/vim-tags'
+NeoBundle 'pmsorhaindo/syntastic-local-eslint.vim'
 if has('lua') " lua機能が有効になっている場合・・・・・・①
     " コードの自動補完
     NeoBundle 'Shougo/neocomplete.vim'
@@ -120,18 +135,18 @@ set ruler " ステータスラインの右側にカーソルの現在位置を�
 "" neocomplcache設定:過去
 "-------------------------------------------------
 ""補完候補が表示されている場合は確定。そうでない場合は改行
-"inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "<CR>"
-"""辞書ファイル
-"autocmd BufRead *.php\|*.ctp\|*.tpl :set dictionary=~/.vim/dictionary/php.dict filetype=php
-"let g:neocomplcache_enable_at_startup = 1
-"let g:neocomplcache_enable_camel_case_completion = 1
-"let g:neocomplcache_enable_underbar_completion = 1
-"let g:neocomplcache_smart_case = 1
-"let g:neocomplcache_min_syntax_length = 3
-"let g:neocomplcache_manual_completion_start_length = 0
-"let g:neocomplcache_caching_percent_in_statusline = 1
-"let g:neocomplcache_enable_skip_completion = 1
-"let g:neocomplcache_skip_input_time = '0.5'
+inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "<CR>"
+""辞書ファイル
+autocmd BufRead *.php\|*.ctp\|*.tpl :set dictionary=~/.vim/dictionary/php.dict filetype=php
+let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_underbar_completion = 1
+let g:neocomplcache_smart_case = 1
+let g:neocomplcache_min_syntax_length = 3
+let g:neocomplcache_manual_completion_start_length = 0
+let g:neocomplcache_caching_percent_in_statusline = 1
+let g:neocomplcache_enable_skip_completion = 1
+let g:neocomplcache_skip_input_time = '0.5'
 "
 "----------------------------------------------------------
 " neocomplete・neosnippetの設定
@@ -159,13 +174,33 @@ endif
 " syntasticの設定
 "----------------------------------------------------------
 "let g:syntastic_enable_signs=1
-let g:syntastic_auto_loc_list=2
-let g:syntastic_mode_map = {'mode': 'passive'} 
-augroup AutoSyntastic
-    autocmd!
-    autocmd InsertLeave,TextChanged * call s:syntastic() 
-augroup END
-function! s:syntastic()
-    w
-    SyntasticCheck
-endfunction
+"let g:syntastic_auto_loc_list=2
+"let g:syntastic_mode_map = {'mode': 'passive'}
+"augroup AutoSyntastic
+"    autocmd!
+"    autocmd InsertLeave,TextChanged * call s:syntastic()
+"augroup END
+"function! s:syntastic()
+"    w
+"    SyntasticCheck
+"endfunction
+"----------------------------------------------------------
+" Syntasticの設定
+"----------------------------------------------------------
+" 構文エラー行に「>>」を表示
+let g:syntastic_enable_signs = 1
+" 他のVimプラグインと競合するのを防ぐ
+let g:syntastic_always_populate_loc_list = 1
+" 構文エラーリストを非表示
+"let g:syntastic_auto_loc_list = 0
+" ファイルを開いた時に構文エラーチェックを実行する
+let g:syntastic_check_on_open = 1
+" 「:wq」で終了する時も構文エラーチェックする
+let g:syntastic_check_on_wq = 1
+
+" Javascript用. 構文エラーチェックにESLintを使用
+let g:syntastic_javascript_checkers=['eslint']
+" Javascript以外は構文エラーチェックをしない
+let g:syntastic_mode_map = { 'mode': 'passive',
+                           \ 'active_filetypes': ['javascript'],
+                           \ 'passive_filetypes': [] }
