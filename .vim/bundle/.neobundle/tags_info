@@ -1,3 +1,4 @@
+ctrlp.vim
 emmet-vim
 indentLine
 lightline.vim
@@ -8,8 +9,14 @@ neosnippet
 neosnippet-snippets
 nerdtree
 syntastic
+syntastic-local-eslint.vim
+tagbar
 unite.vim
 vim-autoclose
+vim-easy-align
+vim-fugitive
+vim-gitgutter
+vim-tags
 vim-trailing-whitespace
 vimfiler
 vimproc

@@ -1,206 +1,245 @@
-:set encoding=utf-8
+set encoding=utf-8
 scriptencoding utf-8
-:set fileencoding=utf-8 " 保存時の文字コード
-:set fileencodings=ucs-boms,utf-8,euc-jp,cp932 " 読み込み時の文字コードの自動判別. 左側が優先される
-:set fileformats=unix,dos,mac " 改行コードの自動判別. 左側が優先される
-:set ambiwidth=double " □や○文字が崩れる問題を解決"
-:syntax on
-:set number
-:set backspace=indent,eol,start
-:set clipboard=unnamed,autoselect
+" 保存時の文字コード
+set fileencoding=utf-8
+" 読み込み時の文字コードの自動判別. 左側が優先される
+set fileencodings=ucs-boms,utf-8,euc-jp,cp932
+" 改行コードの自動判別. 左側が優先される
+set fileformats=unix,dos,mac
+" □や○文字が崩れる問題を解決"
+set ambiwidth=double
 
-set expandtab " タブ入力を複数の空白入力に置き換える
-set tabstop=4 " 画面上でタブ文字が占める幅
-set softtabstop=4 " 連続した空白に対してタブキーやバックスペースキーでカーソルが動く幅
-set autoindent " 改行時に前の行のインデントを継続する
-set smartindent " 改行時に前の行の構文をチェックし次の行のインデントを増減する
-set shiftwidth=4 " smartindentで増減する幅"
+set number
+set backspace=indent,eol,start
+"クリップボードにコピーする
+set clipboard=unnamed,autoselect
 
-set incsearch " インクリメンタルサーチ. １文字入力毎に検索を行う
-set ignorecase " 検索パターンに大文字小文字を区別しない
-set smartcase " 検索パターンに大文字を含んでいたら大文字小文字を区別する
-set hlsearch " 検索結果をハイライト"
+" タブ入力を複数の空白入力に置き換える
+set expandtab
+" 画面上でタブ文字が占める幅
+set tabstop=4
+" 連続した空白に対してタブキーやバックスペースキーでカーソルが動く幅
+set softtabstop=4
+" 改行時に前の行のインデントを継続する
+set autoindent
+" 改行時に前の行の構文をチェックし次の行のインデントを増減する
+set smartindent
+" smartindentで増減する幅"
+set shiftwidth=4
 
-set whichwrap=b,s,h,l,<,>,[,],~ " カーソルの左右移動で行末から次の行の行頭への移動が可能になる
- "
-set cursorline " カーソルラインをハイライト"
+" インクリメンタルサーチ. １文字入力毎に検索を行う
+set incsearch
+" 検索パターンに大文字小文字を区別しない
+set ignorecase
+" 検索パターンに大文字を含んでいたら大文字小文字を区別する
+set smartcase
+" 検索結果をハイライト"
+set hlsearch
+
+" 不可視文字を可視化(タブが「▸-」と表示される)
+set list listchars=tab:\▸\-
+
+" カーソルの左右移動で行末から次の行の行頭への移動が可能になる
+set whichwrap=b,s,h,l,<,>,[,],~
+
+" カーソルラインをハイライト"
+set cursorline
 
 " 行が折り返し表示されていた場合、行単位ではなく表示行単位でカーソルを移動する
 nnoremap j gj
 nnoremap k gk
 nnoremap <down> gj
 nnoremap <up> gk
+
 " tagsジャンプの時に複数ある時は一覧表示
-"nnoremap <C-]> g<C-]> 
+"nnoremap <C-]> g<C-]>
 nnoremap <C-h> :vsp<CR> :exe("tjump ".expand('<cword>'))<CR>
 nnoremap <C-k> :split<CR> :exe("tjump ".expand('<cword>'))<CR>
 
-set showmatch " 括弧の対応関係を一瞬表示する
+" 括弧の対応関係を一瞬表示する
+set showmatch
 source $VIMRUNTIME/macros/matchit.vim " Vimの「%」を拡張する "
 
-set wildmenu " コマンドモードの補完
-set history=5000 " 保存するコマンド履歴の数  "
+" コマンドモードの補完
+set wildmenu
+" 保存するコマンド履歴の数  "
+set history=5000
 
-"ctags設定 拡張子で読み込みタグ変更
-au BufNewFile,BufRead *.php set tags+=$HOME/php.tags
-" vim-tags
-au BufNewFile,BufRead *.php let g:vim_tags_project_tags_command = "ctags --languages=php -f ~/php.tags `pwd` 2>/dev/null &"
-"クリップボードからペーストする時インデントがずれる問題を修正
-if &term =~ "xterm"
-    let &t_SI .= "\e[?2004h"
-    let &t_EI .= "\e[?2004l"
-    let &pastetoggle = "\e[201~"
 
-    function XTermPasteBegin(ret)
-        set paste
-        return a:ret
-    endfunction
+"=================dein================
+" プラグインが実際にインストールされるディレクトリ
+let s:dein_dir = expand('~/.cache/dein')
+" dein.vim 本体
+let s:dein_repo_dir = s:dein_dir . '/repos/github.com/Shougo/dein.vim'
 
-    inoremap <special> <expr> <Esc>[200~ XTermPasteBegin("")
+" dein.vim がなければ github から落としてくる
+if &runtimepath !~# '/dein.vim'
+  if !isdirectory(s:dein_repo_dir)
+    execute '!git clone https://github.com/Shougo/dein.vim' s:dein_repo_dir
+  endif
+  execute 'set runtimepath^=' . fnamemodify(s:dein_repo_dir, ':p')
 endif
 
-if has('vim_starting')
-   " 初回起動時のみruntimepathにneobundleのパスを指定する
-   set runtimepath+=~/.vim/bundle/neobundle.vim/
+" 設定開始
+if dein#load_state(s:dein_dir)
+  call dein#begin(s:dein_dir)
+
+  " プラグインリストを収めた TOML ファイル
+  " 予め TOML ファイル（後述）を用意しておく
+  let g:rc_dir    = expand('~/.vim/rc')
+  let s:toml      = g:rc_dir . '/dein.toml'
+  let s:lazy_toml = g:rc_dir . '/dein_lazy.toml'
+
+  " TOML を読み込み、キャッシュしておく
+  call dein#load_toml(s:toml,      {'lazy': 0})
+  call dein#load_toml(s:lazy_toml, {'lazy': 1})
+
+  " 設定終了
+  call dein#end()
+  call dein#save_state()
 endif
 
-" NeoBundleを初期化
-call neobundle#begin(expand('~/.vim/bundle/'))
-
-" インストールするプラグインをここに記述
-" Neobundle自身を管理
-NeoBundleFetch 'Shougo/neobundle.vim'
-"以下追加したいプラグイン
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/neobundle.vim'
-NeoBundle 'Shougo/vimproc'
-NeoBundle 'scrooloose/nerdtree'
-NeoBundle 'Townk/vim-autoclose'
-NeoBundle 'mattn/emmet-vim'
-" カラースキームmolokai
-NeoBundle 'tomasr/molokai'
-" ステータスラインの表示内容強化
-NeoBundle 'itchyny/lightline.vim'
-" 末尾の全角と半角の空白文字を赤くハイライト
-NeoBundle 'bronson/vim-trailing-whitespace'
-" インデントの可視化
-NeoBundle 'Yggdroot/indentLine'
-"構文チェック
-NeoBundle 'scrooloose/syntastic'
-NeoBundle 'pmsorhaindo/syntastic-local-eslint.vim'
-"ctagコマンドうつのめんどくさいから　TagsGenerate　でvim上で自動でやってくれるようにする"
-"ctags --languages=php -f ~/php.tags `pwd`"
-NeoBundle 'szw/vim-tags'
-" プロジェクトに入ってるESLintを読み込む
-NeoBundle 'szw/vim-tags'
-NeoBundle 'pmsorhaindo/syntastic-local-eslint.vim'
-if has('lua') " lua機能が有効になっている場合・・・・・・①
-    " コードの自動補完
-    NeoBundle 'Shougo/neocomplete.vim'
-    " スニペットの補完機能
-    NeoBundle "Shougo/neosnippet"
-    " スニペット集
-    NeoBundle 'Shougo/neosnippet-snippets'
+" もし、未インストールものものがあったらインストール
+if dein#check_install()
+  call dein#install()
 endif
 
 
-call neobundle#end()
+"色を付ける
+syntax on
+colorscheme molokai
 
-" ファイルタイプ別のプラグイン/インデントを有効にする
-filetype plugin indent on
 
-" vim起動時に未インストールのプラグインをインストールする
-NeoBundleCheck
 
-"----------------------------------------------------------
-" molokaiの設定
-"----------------------------------------------------------
-if neobundle#is_installed('molokai') " molokaiがインストールされていれば
-    colorscheme molokai " カラースキームにmolokaiを設定する
-endif
+"==============プラグイン関係の設定==============
 
-set t_Co=256 " iTerm2など既に256色環境なら無くても良い
-syntax enable " 構文に色を付ける
 
-"----------------------------------------------------------
-" ステータスラインの設定
-"----------------------------------------------------------
-set laststatus=2 " ステータスラインを常に表示
-set showmode " 現在のモードを表示
-set showcmd " 打ったコマンドをステータスラインの下に表示
-set ruler " ステータスラインの右側にカーソルの現在位置を表示する
+let g:airline_theme = 'molokai'
+"====================gitgutter====================
+"変更箇所のハイライト
+let g:gitgutter_highlight_lines = 0
 
-"-------------------------------------------------
-"" neocomplcache設定:過去
-"-------------------------------------------------
-""補完候補が表示されている場合は確定。そうでない場合は改行
-inoremap <expr><CR>  pumvisible() ? neocomplcache#close_popup() : "<CR>"
-""辞書ファイル
-autocmd BufRead *.php\|*.ctp\|*.tpl :set dictionary=~/.vim/dictionary/php.dict filetype=php
+"====================junegunn/vim-easy-align====================
+"enterで整形設定に行くようにする
+vmap <Enter> <Plug>(EasyAlign)
+
+"====================neocomplcache====================
+" ~Disable AutoComplPop. neocomplcashe~
+let g:acp_enableAtStartup = 0
+" Use neocomplcache.
 let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_enable_camel_case_completion = 1
-let g:neocomplcache_enable_underbar_completion = 1
-let g:neocomplcache_smart_case = 1
+" Use smartcase.
+let g:neocomplcache_enable_smart_case = 1
+" Set minimum syntax keyword length.
 let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_manual_completion_start_length = 0
-let g:neocomplcache_caching_percent_in_statusline = 1
-let g:neocomplcache_enable_skip_completion = 1
-let g:neocomplcache_skip_input_time = '0.5'
-"
-"----------------------------------------------------------
-" neocomplete・neosnippetの設定
-"----------------------------------------------------------
-if neobundle#is_installed('neocomplete.vim')
-    " Vim起動時にneocompleteを有効にする
-    let g:neocomplete#enable_at_startup = 1
-    " smartcase有効化. 大文字が入力されるまで大文字小文字の区別を無視する
-    let g:neocomplete#enable_smart_case = 1
-    " 3文字以上の単語に対して補完を有効にする
-    let g:neocomplete#min_keyword_length = 3
-    " 区切り文字まで補完する
-    let g:neocomplete#enable_auto_delimiter = 1
-    " 1文字目の入力から補完のポップアップを表示
-    let g:neocomplete#auto_completion_start_length = 1
-    " バックスペースで補完のポップアップを閉じる
-    inoremap <expr><BS> neocomplete#smart_close_popup()."<C-h>"
+let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
-    " エンターキーで補完候補の確定. スニペットの展開もエンターキーで確定・・・・・・②
-    imap <expr><CR> neosnippet#expandable() ? "<Plug>(neosnippet_expand_or_jump)" : pumvisible() ? "<C-y>" : "<CR>"
-    " タブキーで補完候補の選択. スニペット内のジャンプもタブキーでジャンプ・・・・・・③
-    imap <expr><TAB> pumvisible() ? "<C-n>" : neosnippet#jumpable() ? "<Plug>(neosnippet_expand_or_jump)" : "<TAB>"
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default' : ''
+    \ }
+
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplcache#undo_completion()
+inoremap <expr><C-l>     neocomplcache#complete_common_string()
+
+" Recommended key-mappings.
+" <CR>: close popup and save indent.
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+function! s:my_cr_function()
+  return neocomplcache#smart_close_popup() . "\<CR>"
+endfunction
+" <TAB>: completion.
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplcache#close_popup()
+inoremap <expr><C-e>  neocomplcache#cancel_popup()
+"~neocomplecas~
+
+
+"====================neosnippet====================
+" Plugin key-mappings.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+smap <C-k>     <Plug>(neosnippet_expand_or_jump)
+xmap <C-k>     <Plug>(neosnippet_expand_target)
+
+" SuperTab like snippets behavior.
+" Note: It must be "imap" and "smap".  It uses <Plug> mappings.
+imap <C-k>     <Plug>(neosnippet_expand_or_jump)
+"imap <expr><TAB>
+" \ pumvisible() ? "\<C-n>" :
+" \ neosnippet#expandable_or_jumpable() ?
+" \    "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+smap <expr><TAB> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)" : "\<TAB>"
+
+" For conceal markers.
+if has('conceal')
+  set conceallevel=2 concealcursor=niv
 endif
-"----------------------------------------------------------
-" syntasticの設定
-"----------------------------------------------------------
-"let g:syntastic_enable_signs=1
-"let g:syntastic_auto_loc_list=2
-"let g:syntastic_mode_map = {'mode': 'passive'}
-"augroup AutoSyntastic
-"    autocmd!
-"    autocmd InsertLeave,TextChanged * call s:syntastic()
-"augroup END
-"function! s:syntastic()
-"    w
-"    SyntasticCheck
-"endfunction
-"----------------------------------------------------------
-" Syntasticの設定
-"----------------------------------------------------------
-" 構文エラー行に「>>」を表示
-let g:syntastic_enable_signs = 1
-" 他のVimプラグインと競合するのを防ぐ
-let g:syntastic_always_populate_loc_list = 1
-" 構文エラーリストを非表示
-"let g:syntastic_auto_loc_list = 0
-" ファイルを開いた時に構文エラーチェックを実行する
-let g:syntastic_check_on_open = 1
-" 「:wq」で終了する時も構文エラーチェックする
-let g:syntastic_check_on_wq = 1
 
-" Javascript用. 構文エラーチェックにESLintを使用
-let g:syntastic_javascript_checkers=['eslint']
-" Javascript以外は構文エラーチェックをしない
-let g:syntastic_mode_map = { 'mode': 'passive',
-                           \ 'active_filetypes': ['javascript'],
-                           \ 'passive_filetypes': [] }
+" ~ファイルタイプ毎 & gitリポジトリ毎にtagsの読み込みpathを変える~
+function! ReadTags(type)
+    try
+        execute "set tags=".$HOME."/dotfiles/tags_files/".
+              \ system("cd " . expand('%:p:h') . "; basename `git rev-parse --show-toplevel` | tr -d '\n'").
+              \ "/" . a:type . "_tags"
+    catch
+        execute "set tags=./tags/" . a:type . "_tags;"
+    endtry
+endfunction
+
+augroup TagsAutoCmd
+    autocmd!
+    autocmd BufEnter * :call ReadTags(&filetype)
+augroup END
+
+
+"====================osyo-manga/vim-anzu====================
+" mapping
+nmap n <Plug>(anzu-n-with-echo)
+nmap N <Plug>(anzu-N-with-echo)
+nmap * <Plug>(anzu-star-with-echo)
+nmap # <Plug>(anzu-sharp-with-echo)
+" clear status
+nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
+" statusline
+set statusline=%{anzu#search_status()}
+
+
+
+" ====================indentLine====================
+"let g:indentLine_color_term = 'gray'
+"let g:indentLine_color_gui = '#708090'
+"let g:indentLine_color_gui = '#919496'
+let g:indentLine_char = '¦' "use ¦, ┆ or │
+
+"" vim-indent-guides
+"" Vim 起動時 vim-indent-guides を自動起動
+"let g:indent_guides_enable_on_vim_startup=1
+"" ガイドをスタートするインデントの量
+"let g:indent_guides_start_level=2
+"" 自動カラー無効
+"let g:indent_guides_auto_colors=0
+"" 奇数番目のインデントの色
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  guibg=#444433 ctermbg=gray
+"" 偶数番目のインデントの色
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#333344 ctermbg=darkgray
+"" ガイドの幅
+"let g:indent_guides_guide_size = 1
+"" 偶数番目のインデントの色
+"autocmd VimEnter,Colorscheme * :hi IndentGuidesEven guibg=#333344 ctermbg=darkgray
+"" ガイドの幅
+"let g:indent_guides_guide_size = 1
+
+
+"====================haya14busa/vim-operator-flashy====================
+map y <Plug>(operator-flashy)
+nmap Y <Plug>(operator-flashy)$
+
+
+"====================EmmetHmtl"====================
+let g:user_emmet_leader_key='<C-t>'
