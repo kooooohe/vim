@@ -3,11 +3,12 @@
 	smudge = git-lfs smudge %f
 	required = true
 [user]
-	name = kohekondo
+	name = kooooohe
 	email = 1211lta@gmail.com
 [core]
         editor = /usr/local/bin/vim
 	excludesfile = /Users/k_kondou/.gitignore_global
+	autoCRLF = false
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
 	path = 
