@@ -140,3 +140,7 @@ repo = 'haya14busa/vim-operator-flashy'
 #html補完
 [[plugins]]
 repo = 'mattn/emmet-vim'
+
+#vue補完
+[[plugins]]
+repo = 'posva/vim-vue'
