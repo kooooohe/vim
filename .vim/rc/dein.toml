@@ -68,8 +68,8 @@ repo = 'scrooloose/nerdtree'
 repo = 'Townk/vim-autoclose'
 
 #syntax check
-[[plugins]]
-repo =  'scrooloose/syntastic'
+#[[plugins]]
+#repo =  'scrooloose/syntastic'
 
 # インデントの可視化　上手く機能してない？
 [[plugins]]
@@ -144,3 +144,7 @@ repo = 'mattn/emmet-vim'
 #vue補完
 [[plugins]]
 repo = 'posva/vim-vue'
+
+#syntaxcheck
+[[plugins]]
+repo = 'w0rp/ale'
