@@ -14,6 +14,8 @@ bind '"\C-a": beginning-of-line'
 bind '"\C-e": end-of-line'
 
 
+#PECO
+alias doc='docker exec -it `docker ps | peco | cut -d" " -f 1` /bin/bash'
 
 test -e "${HOME}/.iterm2_shell_integration.bash" && source "${HOME}/.iterm2_shell_integration.bash"
 
