@@ -107,10 +107,10 @@ endif
 
 
 "色を付ける
+set t_Co=256
+colorscheme badwolf
+let g:badwolf_darkgutter = 1
 syntax on
-colorscheme molokai
-
-
 
 "==============プラグイン関係の設定==============
 

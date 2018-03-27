@@ -10,3 +10,4 @@ export PATH=$PATH:/Users/k_kondou/.nodebrew/current/bin
 export PATH=$PATH:/Users/k_kondou/.nodebrew/current/bin
 export PATH=$PATH:/Users/k_kondou/.nodebrew/current/bin
 export PATH="$HOME/.embulk/bin:$PATH"
+source ~/.bash_completions/completions

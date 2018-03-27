@@ -48,8 +48,12 @@ depends = ['vim-airline-themes']
 repo = 'vim-airline/vim-airline-themes'
 
 #コードの色
+#[[plugins]]
+#repo = 'tomasr/molokai'
+
+#コードの色
 [[plugins]]
-repo = 'tomasr/molokai'
+repo = 'sjl/badwolf'
 
 #vimfilerを使うために必要
 [[plugins]]
@@ -148,3 +152,5 @@ repo = 'posva/vim-vue'
 #syntaxcheck
 [[plugins]]
 repo = 'w0rp/ale'
+
+
