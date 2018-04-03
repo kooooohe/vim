@@ -153,4 +153,5 @@ repo = 'posva/vim-vue'
 [[plugins]]
 repo = 'w0rp/ale'
 
-
+[[plugins]]
+repo = 'fatih/vim-go'

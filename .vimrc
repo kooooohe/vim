@@ -1,4 +1,8 @@
+"to move vim go
+filetype plugin on
+
 set encoding=utf-8
+
 scriptencoding utf-8
 " 保存時の文字コード
 set fileencoding=utf-8
@@ -157,6 +161,7 @@ inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplcache#close_popup()
 inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
 "~neocomplecas~
 
 
@@ -259,6 +264,14 @@ highlight link ALEWarningSign StorageClass
 " Ctrl + kで次の指摘へ、Ctrl + jで前の指摘へ移動
 nmap <silent> <C-k> <Plug>(ale_previous_wrap)
 nmap <silent> <C-j> <Plug>(ale_next_wrap)
+
+"==============VIM=GO==================="
+let g:go_def_mapping_enabled = 0
+let g:go_fmt_autosave = 1
+let g:go_highlight_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
 
 "英語のスペルチェック
 set spelllang=en,cjk
