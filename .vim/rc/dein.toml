@@ -148,3 +148,9 @@ repo = 'posva/vim-vue'
 #syntaxcheck
 [[plugins]]
 repo = 'w0rp/ale'
+
+[[plugins]]
+repo = 'fatih/vim-go'
+
+[[plugins]]
+repo = 'tomlion/vim-solidity'
